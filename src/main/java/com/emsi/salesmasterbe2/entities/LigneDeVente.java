@@ -1,9 +1,8 @@
-package com.emsi.salesmasterbe2.Entities;
+package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "lignes_de_vente")
 public class LigneDeVente {

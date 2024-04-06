@@ -1,4 +1,4 @@
-package com.emsi.salesmasterbe2.Entities;
+package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
