@@ -1,6 +1,6 @@
-package com.emsi.salesmasterbe2.Repository;
+package com.emsi.salesmasterbe2.repository;
 
-import com.emsi.salesmasterbe2.Entities.Facture;
+import com.emsi.salesmasterbe2.entities.Facture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.*;
 

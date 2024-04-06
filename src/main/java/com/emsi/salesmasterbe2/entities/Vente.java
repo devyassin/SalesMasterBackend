@@ -1,4 +1,4 @@
-package com.emsi.salesmasterbe2.Entities;
+package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 
 @Table(name = "ventes")

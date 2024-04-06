@@ -1,8 +1,8 @@
 package com.emsi.salesmasterbe2;
 
-import com.emsi.salesmasterbe2.Entities.Role;
-import com.emsi.salesmasterbe2.Entities.Utilisateur;
-import com.emsi.salesmasterbe2.Repository.UtilisateurRepository;
+import com.emsi.salesmasterbe2.entities.Role;
+import com.emsi.salesmasterbe2.entities.Utilisateur;
+import com.emsi.salesmasterbe2.repository.UtilisateurRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +25,7 @@ public class SalesMasterBe2Application {
             utilisateur.setRole(Role.ADMIN);
             utilisateurRepositery.save(utilisateur);
             utilisateur=new Utilisateur();
-            utilisateur.setNom("Oussama Naaman");
+            utilisateur.setNom("Oussama Naaman ");
             utilisateur.setEmail("Naaman@gmail.com");
             utilisateur.setMotDePasse("123azerty.");
             utilisateur.setRole(Role.ADMIN);
