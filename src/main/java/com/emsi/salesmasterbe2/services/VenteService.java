@@ -1,15 +1,12 @@
 package com.emsi.salesmasterbe2.services;
 
-import com.emsi.salesmasterbe2.entities.Vente;
+import com.emsi.salesmasterbe2.daos.VenteDao;
 
 import java.util.List;
 
 public interface VenteService {
-    List<Vente> getAllVentes();
-
-    Vente getVenteById(Long id);
-
-    Vente saveVente(Vente vente);
-
+    VenteDao saveVente(VenteDao venteDao);
+    VenteDao getVenteById(Long id);
+    List<VenteDao> getAllVentes();
     void deleteVente(Long id);
 }

@@ -1,14 +1,12 @@
 package com.emsi.salesmasterbe2.services;
 
-import com.emsi.salesmasterbe2.entities.Client;
+import com.emsi.salesmasterbe2.daos.ClientDao;
+
 import java.util.List;
 
 public interface ClientService {
-    List<Client> getAllClients();
-
-    Client getClientById(Long id);
-
-    Client saveClient(Client client);
-
+    ClientDao saveClient(ClientDao clientDao);
+    ClientDao getClientById(Long id);
+    List<ClientDao> getAllClients();
     void deleteClient(Long id);
 }

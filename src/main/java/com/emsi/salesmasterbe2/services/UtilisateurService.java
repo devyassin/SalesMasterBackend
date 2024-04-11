@@ -1,15 +1,12 @@
 package com.emsi.salesmasterbe2.services;
 
-import com.emsi.salesmasterbe2.entities.Utilisateur;
+import com.emsi.salesmasterbe2.daos.UtilisateurDao;
 
 import java.util.List;
 
 public interface UtilisateurService {
-    List<Utilisateur> getAllUtilisateurs();
-
-    Utilisateur getUtilisateurById(Long id);
-
-    Utilisateur saveUtilisateur(Utilisateur utilisateur);
-
+    UtilisateurDao saveUtilisateur(UtilisateurDao utilisateurDao);
+    UtilisateurDao getUtilisateurById(Long id);
+    List<UtilisateurDao> getAllUtilisateurs();
     void deleteUtilisateur(Long id);
 }
