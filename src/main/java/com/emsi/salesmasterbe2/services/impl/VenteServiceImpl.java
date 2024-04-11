@@ -60,7 +60,6 @@ public class VenteServiceImpl implements VenteService {
         venteDao.setDateVente(venteEntity.getDateVente());
         venteDao.setStatut(String.valueOf(venteEntity.getStatut()));
         venteDao.setTotal(venteEntity.getTotal());
-        // You may need to handle other fields here based on your DTO
         return venteDao;
     }
 }

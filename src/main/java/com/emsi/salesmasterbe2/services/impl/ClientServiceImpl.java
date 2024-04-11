@@ -23,9 +23,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDao saveClient(ClientDao clientDao) {
-        // Convert ClientDao to entity Client before saving
         Client clientEntity = convertToClientEntity(clientDao);
-        // Save the entity and convert it back to ClientDao
         return convertToClientDao(clientRepository.save(clientEntity));
     }
 
@@ -49,23 +47,21 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.deleteById(id);
     }
 
-    // Méthode utilitaire pour la conversion d'une entité Client en ClientDao
     private ClientDao convertToClientDao(Client client) {
         ClientDao clientDao = new ClientDao();
         clientDao.setClientId(client.getClientID());
         clientDao.setNom(client.getNom());
-        clientDao.setAdresse(client.getDescription()); // Est-ce que la description doit être utilisée comme adresse ?
+        clientDao.setAdresse(client.getDescription());
         clientDao.setEmail(client.getEmail());
         clientDao.setTelephone(client.getTéléphone());
         return clientDao;
     }
 
-    // Méthode utilitaire pour la conversion de ClientDao en entité Client
     private Client convertToClientEntity(ClientDao clientDao) {
         Client clientEntity = new Client();
         clientEntity.setClientID(clientDao.getClientId());
         clientEntity.setNom(clientDao.getNom());
-        clientEntity.setDescription(clientDao.getAdresse()); // Assuming description is mapped to address
+        clientEntity.setDescription(clientDao.getAdresse());
         clientEntity.setEmail(clientDao.getEmail());
         clientEntity.setTéléphone(clientDao.getTelephone());
         return clientEntity;
