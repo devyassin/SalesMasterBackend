@@ -4,6 +4,7 @@ import com.emsi.salesmasterbe2.daos.FactureDao;
 import com.emsi.salesmasterbe2.entities.Facture;
 import com.emsi.salesmasterbe2.repository.FactureRepository;
 import com.emsi.salesmasterbe2.services.FactureService;
+import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,21 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public FactureDao saveFacture(FactureDao factureDao) {
-        Facture factureEntity = convertToFactureEntity(factureDao);
+        Facture factureEntity = ObjectMapperUtils.map(factureDao,Facture.class);
         factureEntity = factureRepository.save(factureEntity);
-        return convertToFactureDao(factureEntity);
+        return ObjectMapperUtils.map(factureEntity,FactureDao.class);
     }
 
     @Override
     public FactureDao getFactureById(Long id) {
         Optional<Facture> factureOptional = factureRepository.findById(id);
-        return factureOptional.map(this::convertToFactureDao).orElse(null);
+        return ObjectMapperUtils.map(factureOptional.get(),FactureDao.class);
     }
 
     @Override
     public List<FactureDao> getAllFactures() {
         List<Facture> factures = factureRepository.findAll();
-        return factures.stream().map(this::convertToFactureDao).collect(Collectors.toList());
+        return ObjectMapperUtils.mapAll(factures,FactureDao.class);
     }
 
     @Override
@@ -45,21 +46,5 @@ public class FactureServiceImpl implements FactureService {
         factureRepository.deleteById(id);
     }
 
-    private Facture convertToFactureEntity(FactureDao factureDao) {
-        Facture factureEntity = new Facture();
-        factureEntity.setFactureId(factureDao.getFactureId());
-        factureEntity.setDateFacturation(factureDao.getDateFacturation());
-        factureEntity.setMontantTotal(factureDao.getMontantTotal());
-        factureEntity.setStatutPaiement(factureDao.getStatutPaiement());
-        return factureEntity;
-    }
 
-    private FactureDao convertToFactureDao(Facture factureEntity) {
-        FactureDao factureDao = new FactureDao();
-        factureDao.setFactureId(factureEntity.getFactureId());
-        factureDao.setDateFacturation(factureEntity.getDateFacturation());
-        factureDao.setMontantTotal(factureEntity.getMontantTotal());
-        factureDao.setStatutPaiement(String.valueOf(factureEntity.getStatutPaiement()));
-        return factureDao;
-    }
 }

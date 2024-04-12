@@ -4,6 +4,7 @@ import com.emsi.salesmasterbe2.daos.ProduitDao;
 import com.emsi.salesmasterbe2.entities.Produit;
 import com.emsi.salesmasterbe2.repository.ProduitRepository;
 import com.emsi.salesmasterbe2.services.ProduitService;
+import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,21 @@ public class ProduitServiceImpl implements ProduitService {
 
     @Override
     public ProduitDao saveProduit(ProduitDao produitDao) {
-        Produit produitEntity = convertToProduitEntity(produitDao);
+        Produit produitEntity = ObjectMapperUtils.map(produitDao, Produit.class);
         produitEntity = produitRepository.save(produitEntity);
-        return convertToProduitDao(produitEntity);
+        return ObjectMapperUtils.map(produitEntity, ProduitDao.class);
     }
 
     @Override
     public ProduitDao getProduitById(Long id) {
         Optional<Produit> produitOptional = produitRepository.findById(id);
-        return produitOptional.map(this::convertToProduitDao).orElse(null);
+        return ObjectMapperUtils.map(produitOptional.get(), ProduitDao.class);
     }
 
     @Override
     public List<ProduitDao> getAllProduits() {
         List<Produit> produits = produitRepository.findAll();
-        return produits.stream().map(this::convertToProduitDao).collect(Collectors.toList());
+        return ObjectMapperUtils.mapAll(produits,ProduitDao.class);
     }
 
     @Override
@@ -45,23 +46,4 @@ public class ProduitServiceImpl implements ProduitService {
         produitRepository.deleteById(id);
     }
 
-    private Produit convertToProduitEntity(ProduitDao produitDao) {
-        Produit produitEntity = new Produit();
-        produitEntity.setProduitId(produitDao.getProduitId());
-        produitEntity.setNom(produitDao.getNom());
-        produitEntity.setDescription(produitDao.getDescription());
-        produitEntity.setPrix(produitDao.getPrix());
-        produitEntity.setQuantitéEnStock(produitDao.getQuantiteEnStock());
-        return produitEntity;
-    }
-
-    private ProduitDao convertToProduitDao(Produit produitEntity) {
-        ProduitDao produitDao = new ProduitDao();
-        produitDao.setProduitId(produitEntity.getProduitId());
-        produitDao.setNom(produitEntity.getNom());
-        produitDao.setDescription(produitEntity.getDescription());
-        produitDao.setPrix(produitEntity.getPrix());
-        produitDao.setQuantiteEnStock(produitEntity.getQuantitéEnStock());
-        return produitDao;
-    }
 }

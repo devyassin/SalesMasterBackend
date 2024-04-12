@@ -2,8 +2,13 @@ package com.emsi.salesmasterbe2.daos;
 import com.emsi.salesmasterbe2.entities.*;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
+@Data
+@AllArgsConstructor @NoArgsConstructor
 public class FactureDao {
     private Long factureId;
     private Date dateFacturation;
@@ -11,46 +16,4 @@ public class FactureDao {
     private Statut statutPaiement;
     private VenteDao vente;
 
-    public FactureDao() {
-    }
-
-    public Long getFactureId() {
-        return factureId;
-    }
-
-    public void setFactureId(Long factureId) {
-        this.factureId = factureId;
-    }
-
-    public Date getDateFacturation() {
-        return dateFacturation;
-    }
-
-    public void setDateFacturation(Date dateFacturation) {
-        this.dateFacturation = dateFacturation;
-    }
-
-    public double getMontantTotal() {
-        return montantTotal;
-    }
-
-    public void setMontantTotal(double montantTotal) {
-        this.montantTotal = montantTotal;
-    }
-
-    public @NotNull(message = "statut paiement est obligatoire") com.emsi.salesmasterbe2.entities.Statut getStatutPaiement() {
-        return statutPaiement;
-    }
-
-    public void setStatutPaiement(String statutPaiement) {
-        this.statutPaiement = Statut.valueOf(statutPaiement);
-    }
-
-    public VenteDao getVente() {
-        return vente;
-    }
-
-    public void setVente(VenteDao vente) {
-        this.vente = vente;
-    }
 }

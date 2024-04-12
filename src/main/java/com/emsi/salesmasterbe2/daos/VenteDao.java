@@ -1,9 +1,12 @@
 package com.emsi.salesmasterbe2.daos;
 
 import com.emsi.salesmasterbe2.entities.Statut;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
+@Data @AllArgsConstructor @NoArgsConstructor
 public class VenteDao {
     private Long venteId;
     private Date dateVente;
@@ -11,46 +14,4 @@ public class VenteDao {
     private double total;
     private ClientDao client;
 
-    public VenteDao() {
-    }
-
-    public Long getVenteId() {
-        return venteId;
-    }
-
-    public void setVenteId(Long venteId) {
-        this.venteId = venteId;
-    }
-
-    public Date getDateVente() {
-        return dateVente;
-    }
-
-    public void setDateVente(Date dateVente) {
-        this.dateVente = dateVente;
-    }
-
-    public Statut getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = Statut.valueOf(statut);
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public ClientDao getClient() {
-        return client;
-    }
-
-    public void setClient(ClientDao client) {
-        this.client = client;
-    }
 }

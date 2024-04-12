@@ -5,6 +5,7 @@ import com.emsi.salesmasterbe2.entities.Role;
 import com.emsi.salesmasterbe2.entities.Utilisateur;
 import com.emsi.salesmasterbe2.repository.UtilisateurRepository;
 import com.emsi.salesmasterbe2.services.UtilisateurService;
+import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,21 +25,21 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public UtilisateurDao saveUtilisateur(UtilisateurDao utilisateurDao) {
-        Utilisateur utilisateurEntity = convertToUtilisateurEntity(utilisateurDao);
+        Utilisateur utilisateurEntity = ObjectMapperUtils.map(utilisateurDao,Utilisateur.class);
         utilisateurEntity = utilisateurRepository.save(utilisateurEntity);
-        return convertToUtilisateurDao(utilisateurEntity);
+        return ObjectMapperUtils.map(utilisateurEntity,UtilisateurDao.class);
     }
 
     @Override
     public UtilisateurDao getUtilisateurById(Long id) {
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
-        return utilisateurOptional.map(this::convertToUtilisateurDao).orElse(null);
+        return ObjectMapperUtils.map(utilisateurOptional.get(),UtilisateurDao.class);
     }
 
     @Override
     public List<UtilisateurDao> getAllUtilisateurs() {
-        List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
-        return utilisateurs.stream().map(this::convertToUtilisateurDao).collect(Collectors.toList());
+        List<Utilisateur> utilisateursList = utilisateurRepository.findAll();
+        return ObjectMapperUtils.mapAll(utilisateursList,UtilisateurDao.class);
     }
 
     @Override
@@ -46,23 +47,4 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateurRepository.deleteById(id);
     }
 
-    private Utilisateur convertToUtilisateurEntity(UtilisateurDao utilisateurDao) {
-        Utilisateur utilisateurEntity = new Utilisateur();
-        utilisateurEntity.setUtilisateurID(utilisateurDao.getUtilisateurId());
-        utilisateurEntity.setNom(utilisateurDao.getNom());
-        utilisateurEntity.setEmail(utilisateurDao.getEmail());
-        utilisateurEntity.setMotDePasse(utilisateurDao.getMotDePasse());
-        utilisateurEntity.setRole(Role.valueOf(String.valueOf(utilisateurDao.getRole())));
-        return utilisateurEntity;
-    }
-
-    private UtilisateurDao convertToUtilisateurDao(Utilisateur utilisateurEntity) {
-        UtilisateurDao utilisateurDao = new UtilisateurDao();
-        utilisateurDao.setUtilisateurId(utilisateurEntity.getUtilisateurID());
-        utilisateurDao.setNom(utilisateurEntity.getNom());
-        utilisateurDao.setEmail(utilisateurEntity.getEmail());
-        utilisateurDao.setMotDePasse(utilisateurEntity.getMotDePasse());
-        utilisateurDao.setRole(String.valueOf(utilisateurEntity.getRole()));
-        return utilisateurDao;
-    }
 }

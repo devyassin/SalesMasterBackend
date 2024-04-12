@@ -19,7 +19,7 @@ public class SalesMasterBe2Application {
     CommandLineRunner start(UtilisateurRepository utilisateurRepositery){
         return  args -> {
             Utilisateur utilisateur=new Utilisateur();
-            utilisateur.setNom("yassine lamouadden");
+            utilisateur.setNom("yassin lamouadden");
             utilisateur.setEmail("mouden529@gmail.com");
             utilisateur.setMotDePasse("1264qsfqsfqf");
             utilisateur.setRole(Role.ADMIN);
