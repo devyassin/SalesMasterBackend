@@ -47,8 +47,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void deleteUtilisateur(Long id) {
-        utilisateurRepository.deleteById(id);
+    public UtilisateurDao deleteUtilisateur(Long id) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
+        if (utilisateur.isPresent()) {
+            utilisateurRepository.deleteById(id);
+            return ObjectMapperUtils.map(utilisateur.get(),UtilisateurDao.class);
+        } else {
+            throw new IllegalArgumentException("Utilisateur with ID " + id + " not found");
+        }
     }
-
 }

@@ -43,8 +43,12 @@ public class UtilisateurController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUtilisateur(@PathVariable Long id) {
-        utilisateurService.deleteUtilisateur(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<UtilisateurDao> deleteUtilisateur(@PathVariable Long id) {
+        UtilisateurDao utilisateurDao= utilisateurService.deleteUtilisateur(id);
+        if (utilisateurDao != null) {
+            return new ResponseEntity<>(utilisateurDao, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
