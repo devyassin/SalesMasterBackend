@@ -8,5 +8,5 @@ public interface UtilisateurService {
     UtilisateurDao saveUtilisateur(UtilisateurDao utilisateurDao);
     UtilisateurDao getUtilisateurById(Long id);
     List<UtilisateurDao> getAllUtilisateurs();
-    void deleteUtilisateur(Long id);
+    UtilisateurDao deleteUtilisateur(Long id);
 }
