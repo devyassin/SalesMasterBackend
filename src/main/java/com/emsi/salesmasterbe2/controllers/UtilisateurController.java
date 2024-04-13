@@ -21,7 +21,7 @@ public class UtilisateurController {
     }
 
     @PostMapping
-    public ResponseEntity<UtilisateurDao> createUtilisateur(@RequestBody UtilisateurDao utilisateurDao) {
+    public ResponseEntity<UtilisateurDao> createUtilisateur( @RequestBody UtilisateurDao utilisateurDao) {
         UtilisateurDao createdUtilisateur = utilisateurService.saveUtilisateur(utilisateurDao);
         return new ResponseEntity<>(createdUtilisateur, HttpStatus.CREATED);
     }

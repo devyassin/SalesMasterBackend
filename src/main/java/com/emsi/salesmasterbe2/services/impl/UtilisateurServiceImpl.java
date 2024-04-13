@@ -33,7 +33,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurDao getUtilisateurById(Long id) {
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(id);
-        return ObjectMapperUtils.map(utilisateurOptional.get(),UtilisateurDao.class);
+
+        if (utilisateurOptional.isEmpty()) {
+            throw new IllegalArgumentException("Utilisateur with ID " + id + " not found");
+        }
+        return ObjectMapperUtils.map(utilisateurOptional.get(), UtilisateurDao.class);
     }
 
     @Override
