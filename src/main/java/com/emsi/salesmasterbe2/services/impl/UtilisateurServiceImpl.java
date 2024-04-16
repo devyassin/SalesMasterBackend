@@ -1,17 +1,22 @@
 package com.emsi.salesmasterbe2.services.impl;
 
 import com.emsi.salesmasterbe2.daos.UtilisateurDao;
-import com.emsi.salesmasterbe2.entities.Role;
 import com.emsi.salesmasterbe2.entities.Utilisateur;
+import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.UtilisateurRepository;
 import com.emsi.salesmasterbe2.services.UtilisateurService;
+import com.emsi.salesmasterbe2.utils.AppConstants;
+import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -41,9 +46,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public List<UtilisateurDao> getAllUtilisateurs() {
-        List<Utilisateur> utilisateursList = utilisateurRepository.findAll();
-        return ObjectMapperUtils.mapAll(utilisateursList,UtilisateurDao.class);
+    public PagedResponse<UtilisateurDao> getAllUtilisateurs(int page,int size) {
+        AppUtils.validatePageNumberAndSize(page,size);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Utilisateur> utilisateursPage = utilisateurRepository.findAll(pageable);
+        List<UtilisateurDao> utilisateurs=ObjectMapperUtils.mapAll(utilisateursPage.getContent(),
+                UtilisateurDao.class);
+        PagedResponse<UtilisateurDao> response=new PagedResponse<>(utilisateurs,
+                page,size,utilisateursPage.getNumberOfElements(),utilisateursPage.getTotalPages());
+        return response;
     }
 
     @Override

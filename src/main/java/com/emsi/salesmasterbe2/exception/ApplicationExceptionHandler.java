@@ -34,4 +34,12 @@ public class ApplicationExceptionHandler {
         errorResponse.put("message",ex.getMessage());
         return errorResponse;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ApiException.class)
+    public Map<String, String> handleApiException(ApiException ex){
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message",ex.getMessage());
+        return errorResponse;
+    }
 }
