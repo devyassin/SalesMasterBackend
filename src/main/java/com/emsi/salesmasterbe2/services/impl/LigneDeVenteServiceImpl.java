@@ -1,20 +1,19 @@
 package com.emsi.salesmasterbe2.services.impl;
 
 import com.emsi.salesmasterbe2.daos.LigneDeVenteDao;
-import com.emsi.salesmasterbe2.daos.ProduitDao;
-import com.emsi.salesmasterbe2.daos.VenteDao;
 import com.emsi.salesmasterbe2.entities.LigneDeVente;
-import com.emsi.salesmasterbe2.entities.Produit;
-import com.emsi.salesmasterbe2.entities.Vente;
+import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.LigneDeVenteRepository;
 import com.emsi.salesmasterbe2.services.LigneDeVenteService;
+import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LigneDeVenteServiceImpl implements LigneDeVenteService {
@@ -28,27 +27,42 @@ public class LigneDeVenteServiceImpl implements LigneDeVenteService {
 
     @Override
     public LigneDeVenteDao saveLigneDeVente(LigneDeVenteDao ligneDeVenteDao) {
-        LigneDeVente ligneDeVenteEntity = ObjectMapperUtils.map(ligneDeVenteDao,LigneDeVente.class);
+        LigneDeVente ligneDeVenteEntity = ObjectMapperUtils.map(ligneDeVenteDao, LigneDeVente.class);
         ligneDeVenteEntity = ligneDeVenteRepository.save(ligneDeVenteEntity);
-        return ObjectMapperUtils.map(ligneDeVenteEntity,LigneDeVenteDao.class);
+        return ObjectMapperUtils.map(ligneDeVenteEntity, LigneDeVenteDao.class);
     }
 
     @Override
     public LigneDeVenteDao getLigneDeVenteById(Long id) {
         Optional<LigneDeVente> ligneDeVenteOptional = ligneDeVenteRepository.findById(id);
-        return ObjectMapperUtils.map(ligneDeVenteOptional.get(),LigneDeVenteDao.class);
+        if (ligneDeVenteOptional.isEmpty()) {
+            throw new IllegalArgumentException("Ligne de vente with ID " + id + " not found");
+        }
+        return ObjectMapperUtils.map(ligneDeVenteOptional.get(), LigneDeVenteDao.class);
     }
 
     @Override
-    public List<LigneDeVenteDao> getAllLignesDeVente() {
-        List<LigneDeVente> lignesDeVente = ligneDeVenteRepository.findAll();
-        return ObjectMapperUtils.mapAll(lignesDeVente,LigneDeVenteDao.class);
+    public PagedResponse<LigneDeVenteDao> getAllLignesDeVente(int page, int size) {
+        AppUtils.validatePageNumberAndSize(page, size);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<LigneDeVente> lignesDeVentePage = ligneDeVenteRepository.findAll(pageable);
+        return new PagedResponse<>(
+                ObjectMapperUtils.mapAll(lignesDeVentePage.getContent(), LigneDeVenteDao.class),
+                page,
+                size,
+                lignesDeVentePage.getNumberOfElements(),
+                lignesDeVentePage.getTotalPages()
+        );
     }
 
     @Override
-    public void deleteLigneDeVente(Long id) {
-        ligneDeVenteRepository.deleteById(id);
+    public LigneDeVenteDao deleteLigneDeVente(Long id) {
+        Optional<LigneDeVente> ligneDeVenteOptional = ligneDeVenteRepository.findById(id);
+        if (ligneDeVenteOptional.isPresent()) {
+            ligneDeVenteRepository.deleteById(id);
+            return ObjectMapperUtils.map(ligneDeVenteOptional.get(), LigneDeVenteDao.class);
+        } else {
+            throw new IllegalArgumentException("Ligne de vente with ID " + id + " not found");
+        }
     }
-
-
 }

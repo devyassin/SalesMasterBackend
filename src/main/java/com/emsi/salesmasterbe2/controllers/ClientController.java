@@ -1,13 +1,14 @@
 package com.emsi.salesmasterbe2.controllers;
 
 import com.emsi.salesmasterbe2.daos.ClientDao;
+import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.services.ClientService;
+import com.emsi.salesmasterbe2.utils.AppConstants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
@@ -37,14 +38,19 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientDao>> getAllClients() {
-        List<ClientDao> clients = clientService.getAllClients();
+    public ResponseEntity<PagedResponse<ClientDao>> getAllClients(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size) {
+        PagedResponse<ClientDao> clients = clientService.getAllClients(page, size);
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        clientService.deleteClient(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ClientDao> deleteClient(@PathVariable Long id) {
+        ClientDao clientDao = clientService.deleteClient(id);
+        if (clientDao != null) {
+            return new ResponseEntity<>(clientDao, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

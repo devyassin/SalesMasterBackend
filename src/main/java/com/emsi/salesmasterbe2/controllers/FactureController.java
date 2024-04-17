@@ -1,24 +1,20 @@
 package com.emsi.salesmasterbe2.controllers;
 
 import com.emsi.salesmasterbe2.daos.FactureDao;
+import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.services.FactureService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.emsi.salesmasterbe2.utils.AppConstants;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@AllArgsConstructor
 @RequestMapping("/factures")
 public class FactureController {
 
     private final FactureService factureService;
-
-    @Autowired
-    public FactureController(FactureService factureService) {
-        this.factureService = factureService;
-    }
 
     @PostMapping
     public ResponseEntity<FactureDao> createFacture(@RequestBody FactureDao factureDao) {
@@ -37,14 +33,19 @@ public class FactureController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FactureDao>> getAllFactures() {
-        List<FactureDao> factures = factureService.getAllFactures();
+    public ResponseEntity<PagedResponse<FactureDao>> getAllFactures(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
+                                                                    @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size) {
+        PagedResponse<FactureDao> factures = factureService.getAllFactures(page, size);
         return new ResponseEntity<>(factures, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFacture(@PathVariable Long id) {
-        factureService.deleteFacture(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<FactureDao> deleteFacture(@PathVariable Long id) {
+        FactureDao factureDao = factureService.deleteFacture(id);
+        if (factureDao != null) {
+            return new ResponseEntity<>(factureDao, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
