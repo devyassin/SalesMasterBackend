@@ -11,15 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
 
-    @Autowired
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
+
 
     @PostMapping
     public ResponseEntity<ClientDao> createClient(@RequestBody ClientDao clientDao) {

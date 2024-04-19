@@ -17,11 +17,6 @@ public class LigneDeVenteController {
 
     private final LigneDeVenteService ligneDeVenteService;
 
-    @Autowired
-    public LigneDeVenteController(LigneDeVenteService ligneDeVenteService) {
-        this.ligneDeVenteService = ligneDeVenteService;
-    }
-
     @PostMapping
     public ResponseEntity<LigneDeVenteDao> createLigneDeVente(@RequestBody LigneDeVenteDao ligneDeVenteDao) {
         LigneDeVenteDao createdLigneDeVente = ligneDeVenteService.saveLigneDeVente(ligneDeVenteDao);

@@ -17,10 +17,7 @@ public class VenteController {
 
     private final VenteService venteService;
 
-    @Autowired
-    public VenteController(VenteService venteService) {
-        this.venteService = venteService;
-    }
+
 
     @PostMapping
     public ResponseEntity<VenteDao> createVente(@RequestBody VenteDao venteDao) {

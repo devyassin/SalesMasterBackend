@@ -17,10 +17,6 @@ public class ProduitController {
 
     private final ProduitService produitService;
 
-    @Autowired
-    public ProduitController(ProduitService produitService) {
-        this.produitService = produitService;
-    }
 
     @PostMapping
     public ResponseEntity<ProduitDao> createProduit(@RequestBody ProduitDao produitDao) {
