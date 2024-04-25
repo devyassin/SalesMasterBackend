@@ -2,12 +2,12 @@ package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
-@Data
+@Getter
+@Setter
+@Builder @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

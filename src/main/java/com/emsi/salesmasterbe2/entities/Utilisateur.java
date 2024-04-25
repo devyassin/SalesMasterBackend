@@ -2,12 +2,12 @@ package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@Builder @ToString @AllArgsConstructor @NoArgsConstructor
 @Table(name = "utilisateurs")
 public class Utilisateur {
     @Id

@@ -1,11 +1,12 @@
 package com.emsi.salesmasterbe2.daos;
 
 import com.emsi.salesmasterbe2.entities.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class UtilisateurDao {
     private Long utilisateurId;
     private String nom;

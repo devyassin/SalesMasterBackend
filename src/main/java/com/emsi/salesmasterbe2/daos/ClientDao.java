@@ -1,10 +1,11 @@
 package com.emsi.salesmasterbe2.daos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @AllArgsConstructor @NoArgsConstructor
 public class ClientDao {
     private Long clientId;
