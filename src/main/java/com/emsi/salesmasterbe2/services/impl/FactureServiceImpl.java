@@ -1,13 +1,16 @@
 package com.emsi.salesmasterbe2.services.impl;
 
+import com.emsi.salesmasterbe2.daos.ClientDao;
 import com.emsi.salesmasterbe2.daos.FactureDao;
 import com.emsi.salesmasterbe2.entities.Facture;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.FactureRepository;
 import com.emsi.salesmasterbe2.services.FactureService;
+import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
 import com.emsi.salesmasterbe2.utils.AppConstants;
 import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,14 +20,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class FactureServiceImpl implements FactureService {
 
     private final FactureRepository factureRepository;
+    private ApiServiceUtils apiServiceUtils;
 
-    @Autowired
-    public FactureServiceImpl(FactureRepository factureRepository) {
-        this.factureRepository = factureRepository;
-    }
+
 
     @Override
     public FactureDao saveFacture(FactureDao factureDao) {
@@ -44,16 +46,7 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public PagedResponse<FactureDao> getAllFactures(int page, int size) {
-        AppUtils.validatePageNumberAndSize(page, size);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Facture> facturesPage = factureRepository.findAll(pageable);
-        return new PagedResponse<>(
-                ObjectMapperUtils.mapAll(facturesPage.getContent(), FactureDao.class),
-                page,
-                size,
-                facturesPage.getNumberOfElements(),
-                facturesPage.getTotalPages()
-        );
+        return apiServiceUtils.getAllEntities(page,size,factureRepository, FactureDao.class);
     }
 
     @Override

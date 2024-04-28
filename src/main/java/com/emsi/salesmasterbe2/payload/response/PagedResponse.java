@@ -2,10 +2,13 @@ package com.emsi.salesmasterbe2.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 public class PagedResponse<T> {
     private List<T> content;
@@ -13,4 +16,5 @@ public class PagedResponse<T> {
     private int size;
     private long totalElements;
     private int totalPages;
+    private long totalElementsInTable;
 }

@@ -1,12 +1,15 @@
 package com.emsi.salesmasterbe2.services.impl;
 
+import com.emsi.salesmasterbe2.daos.ClientDao;
 import com.emsi.salesmasterbe2.daos.VenteDao;
 import com.emsi.salesmasterbe2.entities.Vente;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.VenteRepository;
 import com.emsi.salesmasterbe2.services.VenteService;
+import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
 import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +19,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class VenteServiceImpl implements VenteService {
 
     private final VenteRepository venteRepository;
+    private ApiServiceUtils apiServiceUtils;
 
-    @Autowired
-    public VenteServiceImpl(VenteRepository venteRepository) {
-        this.venteRepository = venteRepository;
-    }
+
 
     @Override
     public VenteDao saveVente(VenteDao venteDao) {
@@ -43,16 +45,7 @@ public class VenteServiceImpl implements VenteService {
 
     @Override
     public PagedResponse<VenteDao> getAllVentes(int page, int size) {
-        AppUtils.validatePageNumberAndSize(page, size);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Vente> ventesPage = venteRepository.findAll(pageable);
-        return new PagedResponse<>(
-                ObjectMapperUtils.mapAll(ventesPage.getContent(), VenteDao.class),
-                page,
-                size,
-                ventesPage.getNumberOfElements(),
-                ventesPage.getTotalPages()
-        );
+        return apiServiceUtils.getAllEntities(page,size,venteRepository, VenteDao.class);
     }
 
     @Override

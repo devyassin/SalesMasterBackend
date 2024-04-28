@@ -1,13 +1,16 @@
 package com.emsi.salesmasterbe2.services.impl;
 
+import com.emsi.salesmasterbe2.daos.ClientDao;
 import com.emsi.salesmasterbe2.daos.UtilisateurDao;
 import com.emsi.salesmasterbe2.entities.Utilisateur;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.UtilisateurRepository;
 import com.emsi.salesmasterbe2.services.UtilisateurService;
+import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
 import com.emsi.salesmasterbe2.utils.AppConstants;
 import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,14 +22,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
+    private ApiServiceUtils apiServiceUtils;
 
-    @Autowired
-    public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository) {
-        this.utilisateurRepository = utilisateurRepository;
-    }
 
     @Override
     public UtilisateurDao saveUtilisateur(UtilisateurDao utilisateurDao) {
@@ -47,14 +48,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public PagedResponse<UtilisateurDao> getAllUtilisateurs(int page,int size) {
-        AppUtils.validatePageNumberAndSize(page,size);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Utilisateur> utilisateursPage = utilisateurRepository.findAll(pageable);
-        List<UtilisateurDao> utilisateurs=ObjectMapperUtils.mapAll(utilisateursPage.getContent(),
-                UtilisateurDao.class);
-        PagedResponse<UtilisateurDao> response=new PagedResponse<>(utilisateurs,
-                page,size,utilisateursPage.getNumberOfElements(),utilisateursPage.getTotalPages());
-        return response;
+        return apiServiceUtils.getAllEntities(page,size,utilisateurRepository, UtilisateurDao.class);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package com.emsi.salesmasterbe2.services.impl;
 
+import com.emsi.salesmasterbe2.daos.ClientDao;
 import com.emsi.salesmasterbe2.daos.LigneDeVenteDao;
 import com.emsi.salesmasterbe2.entities.LigneDeVente;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.LigneDeVenteRepository;
 import com.emsi.salesmasterbe2.services.LigneDeVenteService;
+import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
 import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +19,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class LigneDeVenteServiceImpl implements LigneDeVenteService {
 
     private final LigneDeVenteRepository ligneDeVenteRepository;
+    private ApiServiceUtils apiServiceUtils;
 
-    @Autowired
-    public LigneDeVenteServiceImpl(LigneDeVenteRepository ligneDeVenteRepository) {
-        this.ligneDeVenteRepository = ligneDeVenteRepository;
-    }
+
 
     @Override
     public LigneDeVenteDao saveLigneDeVente(LigneDeVenteDao ligneDeVenteDao) {
@@ -43,16 +45,8 @@ public class LigneDeVenteServiceImpl implements LigneDeVenteService {
 
     @Override
     public PagedResponse<LigneDeVenteDao> getAllLignesDeVente(int page, int size) {
-        AppUtils.validatePageNumberAndSize(page, size);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<LigneDeVente> lignesDeVentePage = ligneDeVenteRepository.findAll(pageable);
-        return new PagedResponse<>(
-                ObjectMapperUtils.mapAll(lignesDeVentePage.getContent(), LigneDeVenteDao.class),
-                page,
-                size,
-                lignesDeVentePage.getNumberOfElements(),
-                lignesDeVentePage.getTotalPages()
-        );
+        return apiServiceUtils.
+                getAllEntities(page,size,ligneDeVenteRepository, LigneDeVenteDao.class);
     }
 
     @Override

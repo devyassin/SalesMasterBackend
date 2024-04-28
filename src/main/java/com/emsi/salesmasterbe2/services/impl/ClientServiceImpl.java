@@ -5,8 +5,10 @@ import com.emsi.salesmasterbe2.entities.Client;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.ClientRepository;
 import com.emsi.salesmasterbe2.services.ClientService;
+import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
 import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +18,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private ApiServiceUtils apiServiceUtils;
 
-    @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+
+
+
 
     @Override
     public ClientDao saveClient(ClientDao clientDao) {
@@ -43,16 +46,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public PagedResponse<ClientDao> getAllClients(int page, int size) {
-        AppUtils.validatePageNumberAndSize(page, size);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Client> clientsPage = clientRepository.findAll(pageable);
-        return new PagedResponse<>(
-                ObjectMapperUtils.mapAll(clientsPage.getContent(), ClientDao.class),
-                page,
-                size,
-                clientsPage.getNumberOfElements(),
-                clientsPage.getTotalPages()
-        );
+        return apiServiceUtils.getAllEntities(page,size,clientRepository,ClientDao.class);
     }
 
     @Override
