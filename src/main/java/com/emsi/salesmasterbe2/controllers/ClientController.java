@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @AllArgsConstructor
@@ -37,8 +39,10 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<PagedResponse<ClientDao>> getAllClients(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
-                                                                  @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size) {
-        PagedResponse<ClientDao> clients = clientService.getAllClients(page, size);
+                                                                  @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size,
+                                                                  @RequestParam(name = "name",required = false,defaultValue = AppConstants.DEFAULT_NAME_VALUE) String name) {
+        System.out.println(name +"-----");
+        PagedResponse<ClientDao> clients = clientService.getAllClients(page, size,name);
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 

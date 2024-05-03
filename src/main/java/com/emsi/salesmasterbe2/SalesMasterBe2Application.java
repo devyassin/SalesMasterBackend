@@ -39,7 +39,7 @@ public class SalesMasterBe2Application {
 //            utilisateurRepositery.save(utilisateur);
 
 
-            generateFakeData.generateFakeClients(100);
+            generateFakeData.generateFakeClients(95);
 
         };
     }

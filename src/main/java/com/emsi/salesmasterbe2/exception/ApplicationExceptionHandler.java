@@ -2,6 +2,7 @@ package com.emsi.salesmasterbe2.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,4 +43,12 @@ public class ApplicationExceptionHandler {
         errorResponse.put("message",ex.getMessage());
         return errorResponse;
     }
+
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public Map<String, String> handleDataIntegrationViolationException(DataIntegrityViolationException ex){
+//        Map<String, String> errorResponse = new HashMap<>();
+//        errorResponse.put("message", String.valueOf(ex.getMostSpecificCause()));
+//        return errorResponse;
+//    }
 }
