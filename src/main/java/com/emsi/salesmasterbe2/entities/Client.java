@@ -29,7 +29,7 @@ public class Client {
     @NotBlank(message = "Téléphone est obligatoire")
 //    @Pattern(regexp = "\\d{10}", message = "Téléphone doit contenir 10 chiffres")
     private String telephone;
-    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Vente> historiqueAchats;
 
 }

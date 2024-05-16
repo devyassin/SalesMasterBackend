@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Vente {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_vente")
-    private Date dateVente;
+    private LocalDate dateVente;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "statut")
@@ -36,10 +37,10 @@ public class Vente {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "vente", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL)
     private List<LigneDeVente> lignesDeVente;
 
-    @OneToOne(mappedBy = "vente", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "vente")
     private Facture facture;
 
 

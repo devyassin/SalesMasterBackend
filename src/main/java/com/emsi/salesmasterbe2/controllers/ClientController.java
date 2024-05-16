@@ -46,6 +46,16 @@ public class ClientController {
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientDao> updateClient(@PathVariable Long id, @RequestBody ClientDao clientDao) {
+        try {
+            ClientDao updatedClient = clientService.updateClient(id, clientDao);
+            return new ResponseEntity<>(updatedClient, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ClientDao> deleteClient(@PathVariable Long id) {
         ClientDao clientDao = clientService.deleteClient(id);

@@ -20,29 +20,29 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "produit_id")
-    private Long ProduitId;
+    private Long produitId;
 
     @NotBlank(message = "Nom est obligatoire")
     @Column(name = "nom")
-    private String Nom;
+    private String nom;
 
     @Lob
     @NotBlank(message = "Description est obligatoire")
     @Column(name = "description")
-    private String Description;
+    private String description;
 
     @Min(value = 0, message = "Le prix doit être positive")
     @Column(name = "prix")
-    private double Prix;
+    private double prix;
 
     @Min(value = 0, message = "La quantité en stock doit être positive")
     @Column(name = "quantite_en_stock")
-    private int QuantitéEnStock;
+    private int quantiteEnStock;
 
     @Column(name = "image")
     private String image;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produit")
     private List<LigneDeVente> lignesDeVente;
 
 

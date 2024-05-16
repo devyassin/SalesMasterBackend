@@ -16,18 +16,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private ApiServiceUtils apiServiceUtils;
-
-
-
 
 
     @Override
@@ -55,6 +54,22 @@ public class ClientServiceImpl implements ClientService {
     public PagedResponse<ClientDao> getAllClients(int page, int size,String nom) {
         return apiServiceUtils.getAllEntities(page,size,nom,"client",clientRepository,ClientDao.class);
     }
+
+    @Override
+    public ClientDao updateClient(Long id, ClientDao clientDao) {
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isPresent()) {
+            Client existingClient = clientOptional.get();
+            Client newModifiedClient= ObjectMapperUtils.map(clientDao, existingClient);
+
+            Client updatedClient = clientRepository.save(newModifiedClient);
+
+            return ObjectMapperUtils.map(updatedClient, ClientDao.class);
+        } else {
+            throw new IllegalArgumentException("Client with ID " + id + " not found");
+        }
+    }
+
 
     @Override
     public ClientDao deleteClient(Long id) {

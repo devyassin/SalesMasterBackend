@@ -1,6 +1,7 @@
 package com.emsi.salesmasterbe2.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -19,20 +20,20 @@ public class LigneDeVente {
     @Column(name = "ligne_de_vente_id")
     private Long LigneDeVenteId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "vente_id")
     private Vente vente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "produit_id")
     private Produit produit;
 
-    @NotBlank(message = "quantite est obligatoire")
+    @Min(value = 0, message = "La quantité doit être positive")
     @Column(name = "quantite")
-    private int Quantité;
+    private int quantite;
 
     @Column(name = "prix_unitaire")
-    private double PrixUnitaire;
+    private double prixUnitaire;
 
 
 }

@@ -10,4 +10,5 @@ public interface ClientService {
     ClientDao getClientById(Long id);
     PagedResponse<ClientDao> getAllClients(int page, int size,String nom);
     ClientDao deleteClient(Long id);
+    ClientDao updateClient(Long id, ClientDao clientDao);
 }

@@ -2,6 +2,7 @@ package com.emsi.salesmasterbe2.utils;
 
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.ClientRepository;
+import com.emsi.salesmasterbe2.repository.ProduitRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ public class ApiServiceUtils {
 
 
     private ClientRepository clientRepository;
+    private ProduitRepository produitRepository;
 
     public <T, U> PagedResponse<U> getAllEntitiesLogic( int page,
                                                         int size,
@@ -31,7 +33,10 @@ public class ApiServiceUtils {
 
         if(!name.isEmpty() && type.equals("client") ){
             entitiesPage= (Page<T>) clientRepository.findByNomContains(name,pageable);
-        }else {
+        }else if(!name.isEmpty() && type.equals("produits")){
+            entitiesPage= (Page<T>) produitRepository.findByNomContains(name,pageable);
+        }
+        else {
             entitiesPage = repository.findAll(pageable);
         }
 
@@ -50,8 +55,8 @@ public class ApiServiceUtils {
             int size,
             JpaRepository<T, Long> repository,
             Class<U> dtoClass) {
-        // for the moment i will make type null
-        return getAllEntitiesLogic(page,size,null,null,repository,dtoClass);
+
+        return getAllEntitiesLogic(page,size,"","",repository,dtoClass);
     }
 
     public <T, U, repository> PagedResponse<U> getAllEntities(
