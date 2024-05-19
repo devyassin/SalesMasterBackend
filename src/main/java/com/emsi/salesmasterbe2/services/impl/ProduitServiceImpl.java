@@ -41,17 +41,19 @@ public class ProduitServiceImpl implements ProduitService {
     @Override
     public ProduitDao saveProduit(MultipartFile file,String nom,
                                   String description,double prix,int quantiteEnStock) throws IOException {
-        Path folderPAth= Paths.get(System.getProperty("user.home"),
-                "sales-master-data","produits");
+        String pathString = "D:\\emsi S8\\PFA\\Projet PFA\\" +
+                "SalesMasterBE2Frontend\\public\\products";
+
+        Path folderPAth= Paths.get(pathString);
         if(!Files.exists(folderPAth)){
             Files.createDirectories(folderPAth);
         }
         String fileName= UUID.randomUUID().toString();
-        System.out.println(fileName +"ffffffffff");
-        Path filePath=Paths.get(System.getProperty("user.home"),"sales-master-data","produits",fileName+".png");
+
+        Path filePath=Paths.get(pathString,fileName+".png");
         Files.copy(file.getInputStream(),filePath);
       ProduitDao produitDao=  ProduitDao.builder().prix(prix).nom(nom).
-                description(description).quantiteEnStock(quantiteEnStock).image(filePath.toUri().toString()).build();
+                description(description).quantiteEnStock(quantiteEnStock).image(fileName+".png").build();
 
         Produit produitEntity = ObjectMapperUtils.map(produitDao, Produit.class);
         produitEntity = produitRepository.save(produitEntity);
