@@ -2,6 +2,8 @@ package com.emsi.salesmasterbe2.controllers;
 
 import com.emsi.salesmasterbe2.daos.VenteDao;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
+import com.emsi.salesmasterbe2.payload.response.VenteResponse;
+import com.emsi.salesmasterbe2.payload.response.VenteResponseTable;
 import com.emsi.salesmasterbe2.services.VenteService;
 import com.emsi.salesmasterbe2.utils.AppConstants;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/ventes")
 public class VenteController {
 
@@ -36,9 +39,9 @@ public class VenteController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedResponse<VenteDao>> getAllVentes(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
-                                                                @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size) {
-        PagedResponse<VenteDao> ventes = venteService.getAllVentes(page, size);
+    public ResponseEntity<PagedResponse<VenteResponseTable>> getAllVentes(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
+                                                                          @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size) {
+        PagedResponse<VenteResponseTable> ventes = venteService.getAllVentes(page, size);
         return new ResponseEntity<>(ventes, HttpStatus.OK);
     }
 

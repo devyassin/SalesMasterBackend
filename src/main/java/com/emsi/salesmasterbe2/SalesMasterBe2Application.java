@@ -56,6 +56,7 @@ public class SalesMasterBe2Application {
 
             generateFakeData.generateFakeClients(95);
             generateFakeData.generateFakeProducts(40);
+//            generateFakeData.generateVentes(1);
 //            VenteDao venteDao=new VenteDao();
 //            venteDao.setDateVente(LocalDate.now());
 //            venteDao.setStatut(Statut.NOUVELLE);

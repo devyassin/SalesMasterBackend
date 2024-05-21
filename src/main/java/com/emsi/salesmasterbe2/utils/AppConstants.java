@@ -5,4 +5,5 @@ public class AppConstants {
 
     public static final String DEFAULT_PAGE_SIZE = "2";
     public static final String DEFAULT_NAME_VALUE = "";
+    public static final String DEFAULT_TYPE_VALUE = "";
 }

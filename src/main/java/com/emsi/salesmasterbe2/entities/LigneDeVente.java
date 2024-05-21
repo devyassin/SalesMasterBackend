@@ -20,7 +20,9 @@ public class LigneDeVente {
     @Column(name = "ligne_de_vente_id")
     private Long LigneDeVenteId;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+
+//,cascade = CascadeType.ALL
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vente_id")
     private Vente vente;
 

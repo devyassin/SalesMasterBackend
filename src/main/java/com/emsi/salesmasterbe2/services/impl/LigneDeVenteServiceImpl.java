@@ -1,22 +1,21 @@
 package com.emsi.salesmasterbe2.services.impl;
 
-import com.emsi.salesmasterbe2.daos.ClientDao;
 import com.emsi.salesmasterbe2.daos.LigneDeVenteDao;
+import com.emsi.salesmasterbe2.daos.ProduitQauntiteDao;
+import com.emsi.salesmasterbe2.daos.VenteDao;
 import com.emsi.salesmasterbe2.entities.LigneDeVente;
+import com.emsi.salesmasterbe2.entities.Vente;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.repository.LigneDeVenteRepository;
 import com.emsi.salesmasterbe2.services.LigneDeVenteService;
 import com.emsi.salesmasterbe2.utils.ApiServiceUtils;
-import com.emsi.salesmasterbe2.utils.AppUtils;
 import com.emsi.salesmasterbe2.utils.ObjectMapperUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,10 +29,24 @@ public class LigneDeVenteServiceImpl implements LigneDeVenteService {
 
 
     @Override
-    public LigneDeVenteDao saveLigneDeVente(LigneDeVenteDao ligneDeVenteDao) {
-        LigneDeVente ligneDeVenteEntity = ObjectMapperUtils.map(ligneDeVenteDao, LigneDeVente.class);
-        ligneDeVenteEntity = ligneDeVenteRepository.save(ligneDeVenteEntity);
-        return ObjectMapperUtils.map(ligneDeVenteEntity, LigneDeVenteDao.class);
+    public List<LigneDeVente> saveLigneDeVentes(Vente venteEntity, VenteDao venteDao) {
+        List<LigneDeVenteDao> listLigneDeVente = new ArrayList<>();
+        venteDao.getProduitQauntiteDao().forEach(produitQauntiteDao -> {
+            LigneDeVenteDao ligneDeVenteDao = new LigneDeVenteDao();
+            ligneDeVenteDao.setProduit(produitQauntiteDao.getProduit());
+            ligneDeVenteDao.setQuantite(produitQauntiteDao.getQuantite());
+            ligneDeVenteDao.setPrixUnitaire(produitQauntiteDao.getProduit().getPrix());
+            listLigneDeVente.add(ligneDeVenteDao);
+        });
+
+        List<LigneDeVente> ligneDeVentes = ObjectMapperUtils.mapAll(listLigneDeVente, LigneDeVente.class);
+
+        // Set the Vente entity on each LigneDeVente
+        for (LigneDeVente ligneDeVente : ligneDeVentes) {
+            ligneDeVente.setVente(venteEntity);
+        }
+
+        return ligneDeVentes;
     }
 
     @Override

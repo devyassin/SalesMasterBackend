@@ -4,7 +4,10 @@ import com.emsi.salesmasterbe2.entities.Statut;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+
 @Getter
 @Setter
 @ToString
@@ -15,5 +18,6 @@ public class VenteDao {
     private Statut statut;
     private double total;
     private ClientDao client;
+    private List<ProduitQauntiteDao> produitQauntiteDao;
 
 }

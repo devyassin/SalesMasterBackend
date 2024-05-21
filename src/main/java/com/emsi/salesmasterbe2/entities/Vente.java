@@ -38,9 +38,9 @@ public class Vente {
     private Client client;
 
     @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL)
-    private List<LigneDeVente> lignesDeVente;
+    private List<LigneDeVente> lignesDeVentes;
 
-    @OneToOne(mappedBy = "vente")
+    @OneToOne
     private Facture facture;
 
 

@@ -1,12 +1,10 @@
 package com.emsi.salesmasterbe2.utils;
 
-import com.emsi.salesmasterbe2.daos.ClientDao;
-import com.emsi.salesmasterbe2.daos.LigneDeVenteDao;
-import com.emsi.salesmasterbe2.daos.ProduitDao;
-import com.emsi.salesmasterbe2.daos.VenteDao;
+import com.emsi.salesmasterbe2.daos.*;
 import com.emsi.salesmasterbe2.entities.Produit;
 import com.emsi.salesmasterbe2.entities.Statut;
 import com.emsi.salesmasterbe2.repository.ProduitRepository;
+import com.emsi.salesmasterbe2.services.ProduitService;
 import com.emsi.salesmasterbe2.services.impl.ClientServiceImpl;
 import com.emsi.salesmasterbe2.services.impl.ProduitServiceImpl;
 import com.emsi.salesmasterbe2.services.impl.VenteServiceImpl;
@@ -16,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -26,6 +26,7 @@ public class GenerateFakeData {
     private  ClientServiceImpl clientService;
     private ProduitRepository produitRepository;
     private VenteServiceImpl venteService;
+    private ProduitService produitService;
     public  void generateFakeClients(int numClients){
         Faker faker = new Faker(Locale.FRANCE);
         for (int i = 0; i < numClients; i++) {
@@ -51,23 +52,23 @@ public class GenerateFakeData {
             produitRepository.save(produitEntity);
         }
     }
-//    public  void generateFakeVentes(int numVentes){
-//        Faker faker = new Faker(Locale.ENGLISH);
-//        for (int i = 0; i < numVentes; i++) {
-//            VenteDao venteDao=new VenteDao();
-//            venteDao.setDateVente(LocalDate.now());
-//            venteDao.setStatut(Statut.NOUVELLE);
-//            ClientDao clientDao= clientService.getClientById(2L);
-//            venteDao.setClient(clientDao);
-//            LigneDeVenteDao ligneDeVenteDao=new LigneDeVenteDao();
-//
-////            produitDao.setNom(faker.commerce().productName());
-////            produitDao.setPrix(Double.parseDouble(faker.commerce().price()));
-////            produitDao.setDescription(faker.lorem().paragraph(50));
-////            produitDao.setQuantiteEnStock(faker.number().numberBetween(3,60));
-////            produitDao.setImage(faker.internet().image());
-////            Produit produitEntity = ObjectMapperUtils.map(produitDao, Produit.class);
-////            venteService.saveVente(venteDao);
-//        }
-//    }
+    public  void generateVentes(int numVentes){
+        for (int i = 0; i < numVentes; i++) {
+            VenteDao venteDao=new VenteDao();
+            venteDao.setDateVente(LocalDate.now());
+            List<ProduitQauntiteDao> produitQauntiteDaos=new ArrayList<>();
+            ProduitQauntiteDao produitQauntiteDao=new ProduitQauntiteDao();
+            produitQauntiteDao.setProduit(produitService.getProduitById(2L));
+            produitQauntiteDao.setQuantite(4);
+            produitQauntiteDaos.add(produitQauntiteDao);
+            ProduitQauntiteDao produitQauntiteDao2=new ProduitQauntiteDao();
+            produitQauntiteDao.setProduit(produitService.getProduitById(3L));
+            produitQauntiteDao.setQuantite(5);
+            produitQauntiteDaos.add(produitQauntiteDao2);
+            venteDao.setProduitQauntiteDao(produitQauntiteDaos);
+            venteDao.setStatut(Statut.NOUVELLE);
+            venteDao.setClient(clientService.getClientById(1L));
+            venteService.saveVente(venteDao);
+        }
+    }
 }
