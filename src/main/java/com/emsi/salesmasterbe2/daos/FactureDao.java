@@ -14,7 +14,6 @@ public class FactureDao {
     private Long factureId;
     private Date dateFacturation;
     private double montantTotal;
-    private Statut statutPaiement;
     private VenteDao vente;
 
 }

@@ -37,7 +37,7 @@ public class Vente {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<LigneDeVente> lignesDeVentes;
 
     @OneToOne

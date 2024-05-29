@@ -7,5 +7,6 @@ import lombok.Setter;
 
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class VenteResponseTable extends VenteResponse{
+    private String clientName;
     private int totalProductTypes;
 }

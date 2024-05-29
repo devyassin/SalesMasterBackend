@@ -20,7 +20,6 @@ import java.util.List;
 public class VenteResponse {
     private Long venteId;
     private LocalDate dateVente;
-    private String clientName;
     private Statut statut;
     private double total;
 }

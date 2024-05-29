@@ -3,6 +3,7 @@ package com.emsi.salesmasterbe2.controllers;
 import com.emsi.salesmasterbe2.daos.VenteDao;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.payload.response.VenteResponse;
+import com.emsi.salesmasterbe2.payload.response.VenteResponseDetails;
 import com.emsi.salesmasterbe2.payload.response.VenteResponseTable;
 import com.emsi.salesmasterbe2.services.VenteService;
 import com.emsi.salesmasterbe2.utils.AppConstants;
@@ -29,10 +30,10 @@ public class VenteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VenteDao> getVenteById(@PathVariable Long id) {
-        VenteDao venteDao = venteService.getVenteById(id);
-        if (venteDao != null) {
-            return new ResponseEntity<>(venteDao, HttpStatus.OK);
+    public ResponseEntity<VenteResponseDetails> getVenteById(@PathVariable Long id) {
+        VenteResponseDetails venteResponseDetails = venteService.getVenteById(id);
+        if (venteResponseDetails != null) {
+            return new ResponseEntity<>(venteResponseDetails, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

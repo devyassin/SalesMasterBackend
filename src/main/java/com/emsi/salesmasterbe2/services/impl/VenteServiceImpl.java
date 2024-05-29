@@ -7,7 +7,9 @@ import com.emsi.salesmasterbe2.entities.Vente;
 import com.emsi.salesmasterbe2.exception.ApiException;
 import com.emsi.salesmasterbe2.payload.response.PagedResponse;
 import com.emsi.salesmasterbe2.payload.response.VenteResponse;
+import com.emsi.salesmasterbe2.payload.response.VenteResponseDetails;
 import com.emsi.salesmasterbe2.payload.response.VenteResponseTable;
+import com.emsi.salesmasterbe2.repository.LigneDeVenteRepository;
 import com.emsi.salesmasterbe2.repository.VenteRepository;
 import com.emsi.salesmasterbe2.services.LigneDeVenteService;
 import com.emsi.salesmasterbe2.services.ProduitService;
@@ -38,6 +40,7 @@ public class VenteServiceImpl implements VenteService {
     private ApiServiceUtils apiServiceUtils;
     private LigneDeVenteServiceImpl ligneDeVenteService;
     private ProduitService produitService;
+
 
 
 
@@ -89,12 +92,29 @@ public class VenteServiceImpl implements VenteService {
     }
 
     @Override
-    public VenteDao getVenteById(Long id) {
+    public VenteResponseDetails getVenteById(Long id) {
         Optional<Vente> venteOptional = venteRepository.findById(id);
         if (venteOptional.isEmpty()) {
             throw new IllegalArgumentException("Vente with ID " + id + " not found");
         }
-        return ObjectMapperUtils.map(venteOptional.get(), VenteDao.class);
+
+        List<ProduitQauntiteDao> produitQauntiteDaos=new ArrayList<>();
+        venteOptional.get().getLignesDeVentes().forEach(ligneDeVente -> {
+        ProduitQauntiteDao produitQauntiteDao=new ProduitQauntiteDao();
+                        produitQauntiteDao.setProduit(ObjectMapperUtils
+                                                              .map(ligneDeVente.getProduit()
+                                                                      ,ProduitDao.class));
+                produitQauntiteDao.setQuantite(ligneDeVente.getQuantite());
+                produitQauntiteDaos.add(produitQauntiteDao);
+                    });
+            VenteResponseDetails venteResponseDetails=
+                    ObjectMapperUtils.map(venteOptional.get(), VenteResponseDetails.class);
+
+            venteResponseDetails.setClient(
+                    ObjectMapperUtils.map(venteOptional.get().getClient(), ClientDao.class));
+            venteResponseDetails.setProduitQauntiteDaos(produitQauntiteDaos);
+
+            return venteResponseDetails;
     }
 
     @Override
@@ -109,7 +129,7 @@ public class VenteServiceImpl implements VenteService {
             VenteResponseTable venteResponse=new VenteResponseTable();
             venteResponse.setVenteId(vente.getVenteId());
             venteResponse.setDateVente(vente.getDateVente());
-            venteResponse.setTotal(vente.getTotal());
+            venteResponse.setTotal(AppUtils.formatToTwoDecimalPlaces(vente.getTotal()));
             venteResponse.setStatut(vente.getStatut());
             venteResponse.setTotalProductTypes(vente.getLignesDeVentes().size());
             venteResponse.setClientName(vente.getClient().getNom());
@@ -130,8 +150,19 @@ public class VenteServiceImpl implements VenteService {
     @Override
     public VenteDao deleteVente(Long id) {
         Optional<Vente> venteOptional = venteRepository.findById(id);
+        System.out.println(venteOptional.isPresent());
+        System.out.println(id +"vente --------");
         if (venteOptional.isPresent()) {
-            venteRepository.deleteById(id);
+            venteOptional.get().getLignesDeVentes().forEach(ligneDeVente -> {
+                System.out.println(ligneDeVente.getLigneDeVenteId() + ":D");
+            });
+//            LigneDeVenteDao ligneDeVenteDao=ligneDeVenteService.deleteLigneDeVente
+//                    (1L);
+//            LigneDeVenteDao ligneDeVenteDao2=ligneDeVenteService.deleteLigneDeVente
+//                    (2L);
+
+
+//            venteRepository.deleteById(id);
             return ObjectMapperUtils.map(venteOptional.get(), VenteDao.class);
         } else {
             throw new IllegalArgumentException("Vente with ID " + id + " not found");

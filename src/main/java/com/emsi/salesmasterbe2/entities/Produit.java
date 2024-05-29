@@ -42,7 +42,7 @@ public class Produit {
     @Column(name = "image")
     private String image;
 
-    @OneToMany(mappedBy = "produit")
+    @OneToMany(mappedBy = "produit",cascade = CascadeType.ALL)
     private List<LigneDeVente> lignesDeVente;
 
 

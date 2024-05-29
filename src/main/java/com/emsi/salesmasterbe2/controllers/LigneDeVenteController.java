@@ -46,7 +46,7 @@
 //        if (ligneDeVenteDao != null) {
 //            return new ResponseEntity<>(ligneDeVenteDao, HttpStatus.OK);
 //        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);&
 //        }
 //    }
 //}

@@ -67,7 +67,9 @@ public class LigneDeVenteServiceImpl implements LigneDeVenteService {
     @Override
     public LigneDeVenteDao deleteLigneDeVente(Long id) {
         Optional<LigneDeVente> ligneDeVenteOptional = ligneDeVenteRepository.findById(id);
+
         if (ligneDeVenteOptional.isPresent()) {
+            System.out.println(ligneDeVenteOptional.isPresent() +"truuuue ligne de vente");
             ligneDeVenteRepository.deleteById(id);
             return ObjectMapperUtils.map(ligneDeVenteOptional.get(), LigneDeVenteDao.class);
         } else {

@@ -32,11 +32,6 @@ public class Facture {
     @Column(name = "montant_total")
     private double MontantTotal;
 
-    @Enumerated(EnumType.STRING)
-    @NotBlank(message = "statut paiement est obligatoire")
-    @Column(name = "statut_paiement")
-    private Statut StatutPaiement;
-
     @Length(max = 255)
     @Column(name = "pdf")
     private String PDF;

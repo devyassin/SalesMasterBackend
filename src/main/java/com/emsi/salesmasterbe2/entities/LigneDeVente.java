@@ -21,7 +21,6 @@ public class LigneDeVente {
     private Long LigneDeVenteId;
 
 
-//,cascade = CascadeType.ALL
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vente_id")
     private Vente vente;
