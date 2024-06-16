@@ -1,6 +1,7 @@
 package com.emsi.salesmasterbe2.services.impl;
 
 import com.emsi.salesmasterbe2.daos.*;
+import com.emsi.salesmasterbe2.entities.Facture;
 import com.emsi.salesmasterbe2.entities.LigneDeVente;
 import com.emsi.salesmasterbe2.entities.Statut;
 import com.emsi.salesmasterbe2.entities.Vente;
@@ -11,6 +12,7 @@ import com.emsi.salesmasterbe2.payload.response.VenteResponseDetails;
 import com.emsi.salesmasterbe2.payload.response.VenteResponseTable;
 import com.emsi.salesmasterbe2.repository.LigneDeVenteRepository;
 import com.emsi.salesmasterbe2.repository.VenteRepository;
+import com.emsi.salesmasterbe2.services.FactureService;
 import com.emsi.salesmasterbe2.services.LigneDeVenteService;
 import com.emsi.salesmasterbe2.services.ProduitService;
 import com.emsi.salesmasterbe2.services.VenteService;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +43,7 @@ public class VenteServiceImpl implements VenteService {
     private ApiServiceUtils apiServiceUtils;
     private LigneDeVenteServiceImpl ligneDeVenteService;
     private ProduitService produitService;
+    private FactureService factureService;
 
 
 
@@ -113,7 +117,8 @@ public class VenteServiceImpl implements VenteService {
             venteResponseDetails.setClient(
                     ObjectMapperUtils.map(venteOptional.get().getClient(), ClientDao.class));
             venteResponseDetails.setProduitQauntiteDaos(produitQauntiteDaos);
-
+//            venteResponseDetails.setFacture(ObjectMapperUtils.map(venteOptional.get().
+//                    getFacture(),FactureDao.class));
             return venteResponseDetails;
     }
 
@@ -145,6 +150,40 @@ public class VenteServiceImpl implements VenteService {
                 ventes.getNumberOfElements(),
                 ventes.getTotalPages(),
                 totalElementsInTable);
+    }
+
+    @Override
+    public VenteDao updateVente(Long id, VenteDao venteDao) {
+        Optional<Vente> existingVenteOptional = venteRepository.findById(id);
+        if (existingVenteOptional.isPresent()) {
+            Vente existingVente = existingVenteOptional.get();
+
+            // Update fields of the existingVente from venteDao
+            existingVente.setStatut(venteDao.getStatut());
+
+            // Updating ProduitQauntiteDaos if needed
+//            List<ProduitQauntiteDao> produitQauntiteDaos = venteDao.getProduitQauntiteDao();
+//            if (produitQauntiteDaos != null && !produitQauntiteDaos.isEmpty()) {
+//                setQuantiteEnStockForProducts(produitQauntiteDaos);
+//                existingVente.getLignesDeVentes().clear();
+//                List<LigneDeVente> updatedLignesDeVentes = ligneDeVenteService.saveLigneDeVentes(existingVente, venteDao);
+//                existingVente.setLignesDeVentes(updatedLignesDeVentes);
+//            }
+
+            //Generation d'une facture
+            FactureDao factureDao=new FactureDao();
+            factureDao.setVente(ObjectMapperUtils.map(existingVente,VenteDao.class));
+            factureDao.setDateFacturation(LocalDate.now());
+            factureDao.setMontantTotal(existingVente.getTotal());
+            factureDao.setPDF("url");
+            factureService.saveFacture(factureDao);
+//            existingVente.setFacture(ObjectMapperUtils.map(factureDao, Facture.class));
+            Vente updatedVente = venteRepository.save(existingVente);
+
+            return ObjectMapperUtils.map(updatedVente, VenteDao.class);
+        } else {
+            throw new IllegalArgumentException("Vente with ID " + id + " not found");
+        }
     }
 
     @Override

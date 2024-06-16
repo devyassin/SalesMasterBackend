@@ -1,8 +1,6 @@
-package com.emsi.salesmasterbe2.daos;
+package com.emsi.salesmasterbe2.payload.response;
 
-
-import com.emsi.salesmasterbe2.payload.response.VenteResponseDetails;
-
+import com.emsi.salesmasterbe2.daos.VenteDao;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,11 +9,12 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Builder
-@AllArgsConstructor @NoArgsConstructor
-public class FactureDao {
+@AllArgsConstructor
+@NoArgsConstructor
+public class FactureDetails {
     private Long factureId;
     private LocalDate dateFacturation;
     private double montantTotal;
     private String PDF;
-    private VenteDao vente;
+    private VenteResponseDetails vente;
 }

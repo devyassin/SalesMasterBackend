@@ -11,4 +11,5 @@ public interface VenteService {
     VenteResponseDetails getVenteById(Long id);
     PagedResponse<VenteResponseTable> getAllVentes(int page, int size);
     VenteDao deleteVente(Long id);
+    VenteDao updateVente(Long id, VenteDao venteDao);
 }

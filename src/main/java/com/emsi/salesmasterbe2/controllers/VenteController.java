@@ -46,6 +46,12 @@ public class VenteController {
         return new ResponseEntity<>(ventes, HttpStatus.OK);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<VenteDao> updateVente(@PathVariable Long id, @RequestBody VenteDao venteDao) {
+        VenteDao updatedVente = venteService.updateVente(id, venteDao);
+        return new ResponseEntity<>(updatedVente, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<VenteDao> deleteVente(@PathVariable Long id) {
         VenteDao venteDao = venteService.deleteVente(id);

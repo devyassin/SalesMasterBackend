@@ -40,8 +40,8 @@ public class Vente {
     @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<LigneDeVente> lignesDeVentes;
 
-    @OneToOne
-    private Facture facture;
+//    @OneToOne
+//    private Facture facture;
 
 
 }
