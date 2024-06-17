@@ -8,9 +8,10 @@ import lombok.*;
 @ToString
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class UtilisateurDao {
-    private Long utilisateurId;
+
     private String nom;
     private String email;
     private String motDePasse;
     private Role role;
+
 }

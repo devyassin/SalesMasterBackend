@@ -12,18 +12,18 @@ import lombok.*;
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long UtilisateurID;
+    private Long utilisateurID;
     @NotBlank(message = "Nom est obligatoire")
     @Size(max = 50, message = "Nom ne peut pas dépasser 50 caractères")
     @Column(unique = true)
-    private String Nom;
+    private String nom;
     @Email(message = "Email invalide")
     @NotBlank(message = "Email est obligatoire")
     @Column(unique = true)
-    private String Email;
+    private String email;
     @NotBlank(message = "Mot de passe est obligatoire")
 //    @Min(value = 8,message = "Mot de passe doit contenir au moins 8 caractères")
-    private String MotDePasse;
+    private String motDePasse;
     @Enumerated(EnumType.STRING)
    // @NotBlank(message = "Rôle est obligatoire")
     private Role role;

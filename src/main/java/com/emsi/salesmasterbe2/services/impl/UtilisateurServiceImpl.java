@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +29,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Transactional
-public class UtilisateurServiceImpl implements UtilisateurService {
+public class UtilisateurServiceImpl implements UtilisateurService, UserDetailsService {
 
     private final UtilisateurRepository utilisateurRepository;
     private ApiServiceUtils apiServiceUtils;
@@ -63,4 +67,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             throw new IllegalArgumentException("Utilisateur with ID " + id + " not found");
         }
     }
+
+
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Utilisateur utilisateur=utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User " +
+                        "not found with email: " + email));
+        return   User.builder()
+                .username(utilisateur.getEmail())
+                .password(utilisateur.getMotDePasse())
+                .authorities(utilisateur.getRole().name())
+                .build();
+    }
+
+
 }

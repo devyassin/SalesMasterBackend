@@ -54,9 +54,9 @@ public class SalesMasterBe2Application {
 //            utilisateurRepositery.save(utilisateur);
 
 
-            generateFakeData.generateFakeClients(95);
-            generateFakeData.generateFakeProducts(40);
-            generateFakeData.generateVentes();
+//            generateFakeData.generateFakeClients(95);
+//            generateFakeData.generateFakeProducts(40);
+//            generateFakeData.generateVentes();
 //            generateFakeData.generateVentes(1);
 //            VenteDao venteDao=new VenteDao();
 //            venteDao.setDateVente(LocalDate.now());
