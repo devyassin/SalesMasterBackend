@@ -6,6 +6,7 @@ import com.emsi.salesmasterbe2.payload.response.ProfileDetailsResponse;
 import com.emsi.salesmasterbe2.payload.response.RegisterResponse;
 import com.emsi.salesmasterbe2.repository.UtilisateurRepository;
 import com.emsi.salesmasterbe2.services.impl.UtilisateurServiceImpl;
+import com.emsi.salesmasterbe2.utils.GenerateFakeData;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,7 @@ public class SecurityController {
     private final UtilisateurServiceImpl utilisateurService;
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
+    private GenerateFakeData generateFakeData;
 
 
     @GetMapping("/profile")
@@ -57,11 +59,11 @@ public class SecurityController {
 
         Optional<Utilisateur> existingUser = utilisateurRepository.findByEmail(utilisateurDao.getEmail());
         if (!existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Bad Cridentials"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Bad Cridentials"));
         }
 
         if (!passwordEncoder.matches(utilisateurDao.getMotDePasse(), existingUser.get().getMotDePasse())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Bad Credentials"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Bad Credentials"));
         }
 
         Authentication authentication= authenticationManager.
@@ -83,7 +85,10 @@ public class SecurityController {
         JwtEncoderParameters jwtEncoderParameters=JwtEncoderParameters.
                 from(JwsHeader.with(MacAlgorithm.HS512).build(),jwtClaimsSet);
         String jwt=jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
-        return ResponseEntity.ok(Map.of("access-token", jwt));
+        generateFakeData.generateFakeClients(95);
+        generateFakeData.generateFakeProducts(40);
+        generateFakeData.generateVentes();
+        return ResponseEntity.ok(Map.of("access_token", jwt));
     }
 
     @PostMapping("/register")
