@@ -77,7 +77,7 @@ public class SecurityController {
                 .collect(Collectors.joining(" "));
         JwtClaimsSet jwtClaimsSet=JwtClaimsSet.builder()
                 .issuedAt(instant)
-                .expiresAt(instant.plus(10, ChronoUnit.MINUTES))
+                .expiresAt(instant.plus(10, ChronoUnit.DAYS))
                 .subject(existingUser.get().getEmail())
                 .claim("scope",scope)
                 .build();

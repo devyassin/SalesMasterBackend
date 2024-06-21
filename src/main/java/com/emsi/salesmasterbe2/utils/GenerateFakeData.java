@@ -3,6 +3,7 @@ package com.emsi.salesmasterbe2.utils;
 import com.emsi.salesmasterbe2.daos.*;
 import com.emsi.salesmasterbe2.entities.Produit;
 import com.emsi.salesmasterbe2.entities.Statut;
+import com.emsi.salesmasterbe2.payload.request.FakeVenteRequest;
 import com.emsi.salesmasterbe2.repository.ProduitRepository;
 import com.emsi.salesmasterbe2.services.ProduitService;
 import com.emsi.salesmasterbe2.services.impl.ClientServiceImpl;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 @AllArgsConstructor
@@ -54,20 +52,48 @@ public class GenerateFakeData {
         }
     }
     public  void generateVentes(){
-        VenteDao venteDao=new VenteDao();
-        venteDao.setStatut(Statut.NOUVELLE);
-        venteDao.setClient(clientService.getClientById(2L));
-        ProduitQauntiteDao produitQauntiteDao1=new ProduitQauntiteDao();
-        produitQauntiteDao1.setProduit(produitService.getProduitById(2L));
-        produitQauntiteDao1.setQuantite(5);
-        ProduitQauntiteDao produitQauntiteDao2=new ProduitQauntiteDao();
-        produitQauntiteDao2.setProduit(produitService.getProduitById(3L));
-        produitQauntiteDao2.setQuantite(6);
-        List<ProduitQauntiteDao> produitQauntiteDaos =new ArrayList<>();
+        ArrayList<FakeVenteRequest> fakeVenteRequests=fakeVenteData();
 
-        produitQauntiteDaos.add(produitQauntiteDao1);
-        produitQauntiteDaos.add(produitQauntiteDao2);
-        venteDao.setProduitQauntiteDao(produitQauntiteDaos);
-        venteService.saveVente(venteDao);
+        for (FakeVenteRequest request : fakeVenteRequests) {
+            VenteDao venteDao = new VenteDao();
+            venteDao.setStatut(getRandomStatut());
+            venteDao.setClient(clientService.getClientById(request.getClientId()));
+
+            List<ProduitQauntiteDao> produitQauntiteDaos = new ArrayList<>();
+            long[] produitIds = request.getProductIds();
+            int[] quantites = request.getQuantities();
+
+            for (int i = 0; i < produitIds.length; i++) {
+                ProduitQauntiteDao produitQauntiteDao = new ProduitQauntiteDao();
+                produitQauntiteDao.setProduit(produitService.getProduitById(produitIds[i]));
+                produitQauntiteDao.setQuantite(quantites[i]);
+                produitQauntiteDaos.add(produitQauntiteDao);
+            }
+
+            venteDao.setProduitQauntiteDao(produitQauntiteDaos);
+            venteService.saveVente(venteDao);
+        }
+    }
+
+    public ArrayList<FakeVenteRequest> fakeVenteData(){
+
+        ArrayList<FakeVenteRequest> fakeVenteRequests = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < 5; i++) {
+            long clientId = random.nextInt(60) + 1;
+            long[] idsProds = {random.nextInt(39) + 1, random.nextInt(39) + 1};
+            int[] quantities = {random.nextInt(4) + 1, random.nextInt(4) + 1};
+            FakeVenteRequest fakeVenteRequest = new FakeVenteRequest(clientId, idsProds, quantities);
+            fakeVenteRequests.add(fakeVenteRequest);
+        }
+
+        return fakeVenteRequests;
+    }
+
+    private Statut getRandomStatut() {
+        Statut[] statuses = Statut.values();
+        Random random = new Random();
+        return statuses[random.nextInt(statuses.length)];
     }
 }

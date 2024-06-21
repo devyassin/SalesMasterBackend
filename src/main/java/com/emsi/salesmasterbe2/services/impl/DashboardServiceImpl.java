@@ -1,6 +1,8 @@
 package com.emsi.salesmasterbe2.services.impl;
 
+import com.emsi.salesmasterbe2.entities.Statut;
 import com.emsi.salesmasterbe2.payload.response.CardDataStatsResponse;
+import com.emsi.salesmasterbe2.payload.response.VenteStatusCountResponse;
 import com.emsi.salesmasterbe2.repository.*;
 import com.emsi.salesmasterbe2.services.DashboardService;
 import lombok.AllArgsConstructor;
@@ -31,5 +33,15 @@ public class DashboardServiceImpl  implements DashboardService {
                totalVentes,
                totalUsers,totalProducts,totalFactures);
         return cardDataStatsResponse;
+    }
+
+    @Override
+    public VenteStatusCountResponse getVenteCountStats() {
+        long nouvelle=venteRepository.countByStatut(Statut.NOUVELLE);
+        long enCours=venteRepository.countByStatut(Statut.ENCOURS);
+        long completed=venteRepository.countByStatut(Statut.COMPLETEE);
+        VenteStatusCountResponse venteStatusCountResponse=new VenteStatusCountResponse(nouvelle,
+                enCours,completed);
+        return venteStatusCountResponse;
     }
 }
