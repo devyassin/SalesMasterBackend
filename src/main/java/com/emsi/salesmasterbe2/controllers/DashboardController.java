@@ -2,6 +2,7 @@ package com.emsi.salesmasterbe2.controllers;
 
 
 import com.emsi.salesmasterbe2.payload.response.CardDataStatsResponse;
+import com.emsi.salesmasterbe2.payload.response.StockStatusCountResponse;
 import com.emsi.salesmasterbe2.payload.response.VenteStatusCountResponse;
 import com.emsi.salesmasterbe2.services.impl.DashboardServiceImpl;
 import lombok.AllArgsConstructor;
@@ -25,5 +26,11 @@ public class DashboardController {
     public ResponseEntity<VenteStatusCountResponse> getVenteCount() {
         VenteStatusCountResponse venteStatusCountResponse= dashboardService.getVenteCountStats();
         return new ResponseEntity<>(venteStatusCountResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/stock_count_stats")
+    public ResponseEntity<StockStatusCountResponse> getStatusCountStats() {
+        StockStatusCountResponse stockStatusCountResponse= dashboardService.getStatusCountStats();
+        return new ResponseEntity<>(stockStatusCountResponse, HttpStatus.OK);
     }
 }

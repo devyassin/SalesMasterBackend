@@ -31,7 +31,7 @@ public class LigneDeVenteServiceImpl implements LigneDeVenteService {
     @Override
     public List<LigneDeVente> saveLigneDeVentes(Vente venteEntity, VenteDao venteDao) {
         List<LigneDeVenteDao> listLigneDeVente = new ArrayList<>();
-        venteDao.getProduitQauntiteDao().forEach(produitQauntiteDao -> {
+        venteDao.getProduitQauntiteDaos().forEach(produitQauntiteDao -> {
             LigneDeVenteDao ligneDeVenteDao = new LigneDeVenteDao();
             ligneDeVenteDao.setProduit(produitQauntiteDao.getProduit());
             ligneDeVenteDao.setQuantite(produitQauntiteDao.getQuantite());

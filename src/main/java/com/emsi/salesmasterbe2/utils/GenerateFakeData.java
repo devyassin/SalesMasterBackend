@@ -70,7 +70,7 @@ public class GenerateFakeData {
                 produitQauntiteDaos.add(produitQauntiteDao);
             }
 
-            venteDao.setProduitQauntiteDao(produitQauntiteDaos);
+            venteDao.setProduitQauntiteDaos(produitQauntiteDaos);
             venteService.saveVente(venteDao);
         }
     }

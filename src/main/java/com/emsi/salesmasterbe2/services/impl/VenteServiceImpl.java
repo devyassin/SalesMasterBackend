@@ -77,8 +77,8 @@ public class VenteServiceImpl implements VenteService {
     }
     @Override
     public VenteDao saveVente(VenteDao venteDao) {
-        setQuantiteEnStockForProducts(venteDao.getProduitQauntiteDao());
-        venteDao.setTotal(calculTotalPriceForVente(venteDao.getProduitQauntiteDao()));
+        setQuantiteEnStockForProducts(venteDao.getProduitQauntiteDaos());
+        venteDao.setTotal(calculTotalPriceForVente(venteDao.getProduitQauntiteDaos()));
         venteDao.setDateVente(LocalDate.now());
 
         // Convert VenteDao to Vente entity
@@ -87,7 +87,7 @@ public class VenteServiceImpl implements VenteService {
         // Save LigneDeVentes and set them to the Vente entity
         List<LigneDeVente> ligneDeVentes = ligneDeVenteService.saveLigneDeVentes(venteEntity, venteDao);
         venteEntity.setLignesDeVentes(ligneDeVentes);
-
+        venteEntity.setStatut(venteDao.getStatut());
         // Save the Vente entity, which will cascade to save LigneDeVentes
         venteEntity = venteRepository.save(venteEntity);
 

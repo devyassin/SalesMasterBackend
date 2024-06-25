@@ -2,6 +2,7 @@ package com.emsi.salesmasterbe2.services.impl;
 
 import com.emsi.salesmasterbe2.entities.Statut;
 import com.emsi.salesmasterbe2.payload.response.CardDataStatsResponse;
+import com.emsi.salesmasterbe2.payload.response.StockStatusCountResponse;
 import com.emsi.salesmasterbe2.payload.response.VenteStatusCountResponse;
 import com.emsi.salesmasterbe2.repository.*;
 import com.emsi.salesmasterbe2.services.DashboardService;
@@ -43,5 +44,24 @@ public class DashboardServiceImpl  implements DashboardService {
         VenteStatusCountResponse venteStatusCountResponse=new VenteStatusCountResponse(nouvelle,
                 enCours,completed);
         return venteStatusCountResponse;
+    }
+
+    @Override
+    public StockStatusCountResponse getStatusCountStats() {
+        int[] counts = new int[3]; // counts[0] = faible, counts[1] = moyen, counts[2] = optimal
+
+        produitRepository.findAll().forEach(produit -> {
+            if (produit.getQuantiteEnStock() > 40) {
+                counts[2]++;
+            } else if (produit.getQuantiteEnStock() > 20 && produit.getQuantiteEnStock() <= 40) {
+                counts[1]++;
+            } else {
+                counts[0]++;
+            }
+        });
+        int faible = counts[0];
+        int moyen = counts[1];
+        int optimal = counts[2];
+        return new StockStatusCountResponse(faible,moyen,optimal);
     }
 }

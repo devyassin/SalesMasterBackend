@@ -18,6 +18,6 @@ public class VenteDao {
     private Statut statut;
     private double total;
     private ClientDao client;
-    private List<ProduitQauntiteDao> produitQauntiteDao;
+    private List<ProduitQauntiteDao> produitQauntiteDaos;
 
 }
