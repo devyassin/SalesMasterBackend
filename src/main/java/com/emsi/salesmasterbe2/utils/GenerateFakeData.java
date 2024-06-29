@@ -4,6 +4,7 @@ import com.emsi.salesmasterbe2.daos.*;
 import com.emsi.salesmasterbe2.entities.Produit;
 import com.emsi.salesmasterbe2.entities.Statut;
 import com.emsi.salesmasterbe2.payload.request.FakeVenteRequest;
+import com.emsi.salesmasterbe2.repository.ClientRepository;
 import com.emsi.salesmasterbe2.repository.ProduitRepository;
 import com.emsi.salesmasterbe2.services.ProduitService;
 import com.emsi.salesmasterbe2.services.impl.ClientServiceImpl;
@@ -26,6 +27,8 @@ public class GenerateFakeData {
     private ProduitRepository produitRepository;
     private VenteServiceImpl venteService;
     private ProduitService produitService;
+    private ClientRepository clientRepository;
+
     public  void generateFakeClients(int numClients){
         Faker faker = new Faker(Locale.FRANCE);
         for (int i = 0; i < numClients; i++) {
@@ -34,7 +37,9 @@ public class GenerateFakeData {
             clientDao.setAdresse(faker.address().fullAddress());
             clientDao.setEmail(faker.internet().emailAddress());
             clientDao.setTelephone(faker.phoneNumber().phoneNumber());
-            clientService.saveClient(clientDao);
+            if(!clientRepository.existsClientByEmail(clientDao.getEmail())){
+                clientService.saveClient(clientDao);
+            }
         }
     }
 

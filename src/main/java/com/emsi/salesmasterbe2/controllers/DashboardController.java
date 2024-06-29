@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class DashboardController {
     private final DashboardServiceImpl dashboardService;
 
+
     @GetMapping("/cards")
     public ResponseEntity<CardDataStatsResponse> getcardsData() {
            CardDataStatsResponse cardDataStatsResponse= dashboardService.getCardDataStats();
